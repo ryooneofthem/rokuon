@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<title>{% block title %}{% endblock %} - Roku-On!</title>{% block head %}
+    <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet" media="screen, projection" type="text/css">
+    <script src="{{ url_for('static', filename='js/main.js') }}" type="text/javascript"></script>
+{% endblock %}
+  </head>
+  <body>
+<div id="toolbarNav">
+  <div id="corners">
+      <a href="/" title="home" class="toobarIcon">ホーム </a>
+      <a href="/upload" title="upload" class="toobarIcon">アップロード</a>
+  </div>
+  <ul id="util">
+  	  {% if g.user %}
+      <li> 
+	    <span>Welcome,{{ g.user.nickname() }}</span><a title="logout" href="{{ url_for('logout') }}">ログアウト</a>
+      </li>
+	  {% else %}
+	  <li> 
+	    <a title="login" href="{{ url_for('login') }}">ログイン</a>
+      </li>
+	  {% endif %}
+      <li class="divider">|</li>
+      <li>
+        <a title="help" target="_blank" href="/help">ヘルプ</a>
+      </li>
+  </ul>
+</div>
+  <div id="content">{% block content %}{% endblock %}
+  </div>
+  <div id="message">
+  {% for flash in flashes %}
+  <p>{{ flash }}</p>
+  {% endfor %}
+  </div>
+  <hr class="clear clearfix hide"/>
+  <div id="footer">{% block footer %}
+  <script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-118079-9']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+  </script>
+  &copy; Copyright 2011 by <a href="/">me</a>.
+{% endblock %}
+  </div>
+  </body>
+</html>

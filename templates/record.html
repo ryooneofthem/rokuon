@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block title %}Record{% endblock %}
+{% block head %}{{ super() }}
+	<link href="{{ url_for('static', filename='skin/jplayer.blue.monday.css') }}" rel="stylesheet" type="text/css" />
+	<script src="http://code.jquery.com/jquery-1.4.2.min.js"></script>
+	<script src="{{ url_for('static', filename='js/jquery.jplayer.min.js') }}" type="text/javascript"></script>
+	<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+<style type="text/css">
+	.alignCenter{
+		/*
+		margin:0 0 0 auto;
+		text-align:center;
+		*/
+	}
+	#push_buttons{
+		width: 60%;
+		margin: 0 auto;
+	}
+	#push_buttons .left{
+		margin: 0 5px;
+	} 
+</style>
+<script type="text/javascript">
+//<![CDATA[
+$(document).ready(function(){
+
+	$("#jquery_jplayer_1").jPlayer({
+		ready: function () {
+			$(this).jPlayer("setMedia", {
+				mp3: "{{ url_for('getFile',name=record.key()) }}"
+			}).jPlayer("play");
+		},
+		ended: function (event) {
+			$(this).jPlayer("play");
+		},
+		swfPath: "{{ url_for('static', filename='js') }}",
+		supplied: "mp3"
+	});
+
+});
+//]]>
+</script>
+{% endblock %}
+{% block content %}
+<!--
+<ul>
+  <li><img id="avatar" src="{{ avatar }}"/>{{record.owner.nickname()}}</li>
+  <li>{% if record.owner == user %}<a title="delete this" href="{{ url_for('record_delete',id=record.key().id()) }}">X</a> {% endif %}{{ record.desc }}</li>  
+  <li><a id="file_play" href="{{ url_for('getFile',name=record.key()) }}">File</a></li>
+</ul>
+-->
+<ul id="list">
+<li>
+  <p class="meta"> 
+    <a class="avatar" title="" href="#"><img src="{{ record.owner.email|avatarImgUrl }}" alt="avatar"/></a> 
+    <a class="tweeter" title="" href="#">{{ record.owner.nickname() }}</a> 
+  </p> 
+  <p class="tweet-text"> 
+    <span class="speech-thingy"></span> 
+    {{ record.desc}}
+    <!--<a class="permalink" title="Read more" href="#">&infin;</a>-->
+	{% if record.owner == user %}
+	<span class="right"><span class="buttom"><!--2011/06/30-->{{ record.createTime|datetimeformat}}</span></span>
+	<a class="permalink" title="Delete this" href="{{ url_for('record_delete',id=record.key().id()) }}">x</a>
+	{% endif %} 
+  </p> 
+</li>
+</ul>
+
+<div id="push_buttons">
+	<span class="left"><a href="http://twitter.com/share" class="twitter-share-button" data-count="vertical">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script></span>
+	<span class="left"><g:plusone size="tall"></g:plusone></g:plusone></span>
+	<span class="left"><div id="fb-root"></div><script src="http://connect.facebook.net/en_US/all.js#xfbml=1"></script><fb:like href="http://ro-ku-on.appspot.com/" send="false" layout="box_count" width="60" show_faces="false" font=""></fb:like></span>
+</div>
+<div class="clear clearfix"/>
+<div class="alignCenter" align="center">
+<div id="jquery_jplayer_1" class="jp-jplayer"></div>
+<div class="jp-audio">
+<div class="jp-type-single">
+<div id="jp_interface_1" class="jp-interface">
+  <ul class="jp-controls">
+  <li><a href="#" class="jp-play" tabindex="1">play</a></li>
+  <li><a href="#" class="jp-pause" tabindex="1">pause</a></li>
+  <li><a href="#" class="jp-stop" tabindex="1">stop</a></li>
+  <li><a href="#" class="jp-mute" tabindex="1">mute</a></li>
+  <li><a href="#" class="jp-unmute" tabindex="1">unmute</a></li>
+  </ul>
+<div class="jp-progress">
+<div class="jp-seek-bar"><div class="jp-play-bar"></div></div>
+</div>
+<div class="jp-volume-bar"><div class="jp-volume-bar-value"></div></div>
+<div class="jp-current-time"></div><div class="jp-duration"></div></div>
+<div id="jp_playlist_1" class="jp-playlist">
+<!--
+  <ul>
+  <li>Bubble</li>
+  </ul>
+-->
+</div>
+</div>
+</div>
+</div>
+{% endblock %}

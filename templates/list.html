@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Index{% endblock %}
+{% block head %}{{ super() }}
+  <style type="text/css">
+    .important { color: #336699; }
+  </style>
+<script src="http://code.jquery.com/jquery-1.4.2.min.js"></script>
+<script>
+	function showPlayer(myurl){
+		$('#player').html('');
+		$('<iframe />', {"scrolling":"no","width":"100%","height":"100%","name":"iframe_player","id":"iframe_player","src":myurl})
+		.appendTo('#player');
+	}
+</script>
+{% endblock %}
+{% block content %}
+<ul id="list">
+{% for record in records %}
+<li>
+  <p class="meta"> 
+    <a class="avatar" title="" href="#"><img src="{{ record.owner.email|avatarImgUrl }}" alt="avatar"/></a> 
+    <a class="tweeter" title="" href="#">{{ record.owner.nickname() }}</a> 
+  </p> 
+  <p class="tweet-text"> 
+    <span class="speech-thingy"></span> 
+    {{ record.desc|limliString }}
+    <!--<a class="permalink" title="Read more" href="#">&infin;</a>-->
+	<span class="right"><span class="buttom">
+		<a class="soundIcon" title="play the record" href="#" onclick="showPlayer('{{ url_for('player',id=record.key().id())  }}');">　</a>
+		<a title="Record - {{ record.key().id() }}'s detail" href="{{ url_for('record_read',id=record.key().id()) }}">{{ record.createTime|datetimeformat}}</a>
+	</span></span>
+	{% if record.owner == user %}
+	<a class="permalink" title="Delete this" href="{{ url_for('record_delete',id=record.key().id()) }}">x</a>
+	{% endif %} 
+  </p>
+</li>
+{% endfor %}
+</ul>
+<div id="player">Waiting load file</div>
+{% endblock %}

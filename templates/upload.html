@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Record{% endblock %}
+{% block head %}{{ super() }}
+	<script src="http://code.jquery.com/jquery-1.4.2.min.js"></script>
+	<script src="{{ url_for('static', filename='js/jquery.swfobject.1-1-1.min.js') }}"></script>
+  </head>
+  <script>
+flashMovie = null;
+$(document).ready(
+	function () {
+		flashMovie = $('#flashInteract .movie');
+		flashMovie.flash(
+			{
+				swf: '{{ url_for("static", filename="swf/Main.swf") }}',
+				//width: 800,
+				//height: 600,
+				allowscriptaccess:'always',
+				allowfullscreen : 'true',
+				//wmode:'transparent',
+				wmode:'Window',
+			}
+		);
+	}
+);
+function showAlert(message){
+	alert("訊息來自於Flex :"+ message );
+}
+function successUpload(){
+	$(window.location).attr('href', '/');
+}
+function sendToFlash(t) {
+	flashMovie.flash(
+		function() {
+			//alert(t);
+			this.setDesc(t);
+			//this.saveFile($("input[name=desc]").val());
+			//this.SetVariable('/:message', document.getElementById('data').value);
+		}
+	);
+}
+</script>
+{% endblock %}
+{% block content %}
+			<!--<form name="myForm" action="" enctype="multipart/form-data" method="post">-->
+            <div><label>Description:</label></div>
+            <div><textarea id="desc" name="desc" rows="3" cols="60" onblur="sendToFlash(this.value);"></textarea></div>
+            <div><label>Sound:</label></div>
+			
+			<div id="flashInteract">
+				<div class="movie"></div>
+			</div>
+			<div id="manual">
+				<p>錄製聲音使用說明:</p>
+				<li>先點選"錄音"鈕<img src="{{ url_for('static', filename='img/rec.png') }}"/></li>
+				<li>若出現<img src="http://hicall.hinet.net/webdial/images/interface/flash_access.png"/>請點選"允許"</li>
+				<li>按下"暫停"鈕<img src="{{ url_for('static', filename='img/breack.png') }}"/></li>
+				<li>可選擇"試聽"<img src="{{ url_for('static', filename='img/play.png') }}"/>或是重新"錄製"<img src="{{ url_for('static', filename='img/rec.png') }}"/></li>
+				<li>滿意的話即可按下"上傳"<img src="{{ url_for('static', filename='img/fileadd.png') }}"/></li>
+			</div>
+            <!--<div><input type="file" name="sound"/></div>-->
+            <!--<div><input type="button" onclick="sendToFlash(myForm.desc.value);" value="Submit"></div>-->
+          <!--</form>-->
+{% endblock %}
